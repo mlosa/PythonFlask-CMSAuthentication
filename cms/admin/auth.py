@@ -11,32 +11,28 @@ def protected(route_function):
     def wrapped_route_function(**kwargs):
         if g.user is None:
             return redirect(url_for('admin.login'))
-
-
         return route_function(**kwargs)
-
-
-    return wrapped_route_function()
+    return wrapped_route_function
 
 
 @admin_bp.before_app_request
 def load_user():
     user_id = session.get('user_id')
-    g.user = User.query.get(user_id) if user_id is not None else none
+    g.user = User.query.get(user_id) if user_id is not None else None
 
 
 @admin_bp.route('/login', methods=('GET', 'POST'))
 def login():
-    if request.method =='POST':
-        username = request.form('username')
-        password = request.form('password')
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
         error = None
 
         user = User.query.filter_by(username=username).first()
         if user is None:
             error = "No username"
 
-        elif not user.check(password):
+        elif not user.check_password(password):
             error = "Username and Password do not match our records"
 
         if error is None:
@@ -47,6 +43,7 @@ def login():
         flash(error)
 
     return render_template('admin/login.html')
+
 
 @admin_bp.route('/logout')
 def logout():

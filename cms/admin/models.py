@@ -30,7 +30,7 @@ class User(db.Model):
     firstname = db.Column(db.String(100), nullable=False)
     lastname = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    def check_password(selfvalue):
+    def check_password(self, value):
 
         return check_password_hash(self.password, value)
 

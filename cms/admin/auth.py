@@ -30,15 +30,15 @@ def login():
 
         user = User.query.filter_by(username=username).first()
         if user is None:
-            error = "No username"
+            error = 'No username'
 
         elif not user.check_password(password):
-            error = "Username and Password do not match our records"
+            error = 'Username and Password do not match our records'
 
         if error is None:
             session.clear()
             session['user_id'] = user.id
-            redirect(url_for('admin.content', type='page'))
+            return redirect(url_for('admin.content', type='page'))
 
         flash(error)
 
